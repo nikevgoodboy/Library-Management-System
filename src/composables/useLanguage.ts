@@ -8,6 +8,7 @@ const translations: Translations = {
   en: {
     "nav.dashboard": "Dashboard",
     "nav.books": "Books",
+    "nav.category": "Category",
     "nav.students": "Students",
     "nav.borrowing": "Borrowing",
     "nav.logout": "Logout",
@@ -24,6 +25,7 @@ const translations: Translations = {
     "students.number": "Number",
     "students.add": "Add",
     "students.delete": "Delete",
+    "students.BooksManagerment": "Books Management",
   },
   km: {
     "nav.dashboard": "ផ្ទាំងគ្រប់គ្រង",
@@ -44,6 +46,8 @@ const translations: Translations = {
     "students.number": "លេខទំនាក់ទំនង",
     "students.add": "បន្ថែម",
     "students.delete": "លុប",
+    "students.BooksManagerment": "ការគ្រប់គ្រងសៀវភៅ",
+    "nav.category": "ប្រភេទ",
   },
 };
 
