@@ -10,19 +10,37 @@
       {{ t("students.BooksManagerment") }}
     </p>
 
-    <!-- Add Book Button -->
+    <!-- Add Book Button and Search -->
     <div class="flex justify-between items-center mb-4">
       <h2
         class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in"
       >
         {{ t("books.list") }}
       </h2>
-      <button
-        @click="openAddModal"
-        class="px-4 sm:px-5 py-1 sm:py-2 border border-blue-500 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors duration-300"
-      >
-        {{ t("students.new") }}
-      </button>
+      <div class="flex items-center space-x-2">
+        <div class="relative">
+          <input
+            v-model="searchQuery"
+            type="text"
+            :placeholder="t('books.search_placeholder')"
+            class="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800 w-48 sm:w-64"
+          />
+          <button
+            v-if="searchQuery"
+            @click="clearSearch"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            :title="t('books.clear_search')"
+          >
+            ✕
+          </button>
+        </div>
+        <button
+          @click="openAddModal"
+          class="px-4 sm:px-5 py-1 sm:py-2 border border-blue-500 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors duration-300"
+        >
+          {{ t("students.new") }}
+        </button>
+      </div>
     </div>
 
     <!-- Modal for Adding/Editing Book -->
@@ -37,42 +55,47 @@
           {{ editingBook ? t("books.edit") : t("books.add") }}
         </h3>
 
-
         <form @submit.prevent="submitBook">
           <div class="grid grid-cols-1 gap-4">
             <div>
-    <label class="block text-sm font-medium text-gray-700">
-    Quantity
-    </label>
-    <input
-    v-model.number="newBook.quantity"
-    type="number"
-    min="1"
-    required
-    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
-    @input="validateForm"
-  />
-    <p v-if="errors.quantity" class="text-red-500 text-xs mt-1">
-    {{ errors.quantity }}
-    </p>
-  </div>
-   <div>
-  <label class="block text-sm font-medium text-gray-700">
-    Category
-  </label>
-  <input
-    v-model.number="newBook.category_id"
-    type="number"
-    min="1"
-    required
-    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
-    @input="validateForm"
-  />
-    <p v-if="errors.category_id" class="text-red-500 text-xs mt-1">
-    {{ errors.category_id }}
-     </p>
-      </div>
-
+              <label class="block text-sm font-medium text-gray-700">
+                Quantity
+              </label>
+              <input
+                v-model.number="newBook.quantity"
+                type="number"
+                min="1"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
+                @input="validateForm"
+              />
+              <p v-if="errors.quantity" class="text-red-500 text-xs mt-1">
+                {{ errors.quantity }}
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">
+                Category
+              </label>
+              <select
+                v-model.number="newBook.category_id"
+                required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
+                @change="validateForm"
+              >
+                <option value="" disabled selected>Select a category</option>
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+              <p v-if="errors.category_id" class="text-red-500 text-xs mt-1">
+                {{ errors.category_id }}
+              </p>
+            </div>
             <div>
               <label class="block text-sm font-medium text-gray-700">{{
                 t("books.fields.title")
@@ -106,14 +129,21 @@
               <label class="block text-sm font-medium text-gray-700">{{
                 t("books.fields.author_id")
               }}</label>
-              <input
+              <select
                 v-model.number="newBook.author_id"
-                type="number"
-                min="1"
                 required
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
-                @input="validateForm"
-              />
+                @change="validateForm"
+              >
+                <option value="" disabled selected>Select an author</option>
+                <option
+                  v-for="author in authors"
+                  :key="author.id"
+                  :value="author.id"
+                >
+                  {{ author.full_name }}
+                </option>
+              </select>
               <p v-if="errors.author_id" class="text-red-500 text-xs mt-1">
                 {{ errors.author_id }}
               </p>
@@ -137,8 +167,6 @@
             </button>
           </div>
         </form>
-
-
       </div>
     </div>
 
@@ -210,7 +238,7 @@
             <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               <button
                 @click.stop="openEditModal(index)"
-                class="bg-blue-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-blue-500 transition-colors duration-300"
+                class="bg-blue-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-blue-500 transition-colors duration-200"
               >
                 {{ t("books.edit") }}
               </button>
@@ -218,7 +246,7 @@
             <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               <button
                 @click.stop="deleteBook(book.id)"
-                class="bg-red-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-red-500 transition-colors duration-300"
+                class="bg-red-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-red-500 transition-colors duration-200"
               >
                 {{ t("books.delete") }}
               </button>
@@ -229,7 +257,10 @@
     </div>
 
     <!-- Pagination -->
-    <div class="flex justify-end mt-4 sm:mt-6 space-x-2 sm:space-x-3">
+    <div
+      v-if="!searchQuery"
+      class="flex justify-end mt-4 sm:mt-6 space-x-2 sm:space-x-3"
+    >
       <button
         v-for="page in totalPages"
         :key="page"
@@ -248,7 +279,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useLanguage } from "../composables/useLanguage";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
@@ -258,13 +289,23 @@ interface Book {
   id: string;
   title: string;
   description: string;
-  author_id?: number; 
+  author_id?: number;
   author_name: string;
   created_by: number;
   quantity?: number;
   category_id?: number;
+  category?: string; // Added for GET /api/books/{id} response
 }
 
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface Author {
+  id: number;
+  full_name: string;
+}
 
 const { t } = useLanguage();
 const toast = useToast();
@@ -272,18 +313,27 @@ const router = useRouter();
 const { token, isAuthenticated, user } = useAuth();
 
 const API_URL = "http://localhost:3000/api/books";
+const CATEGORY_API_URL = "http://localhost:3000/api/categories";
+const AUTHOR_API_URL = "http://localhost:3000/api/authors";
+const SEARCH_API_URL = "http://localhost:3000/api/books/search";
 
 const books = ref<Book[]>([]);
+const categories = ref<Category[]>([]);
+const authors = ref<Author[]>([]);
 const newBook = ref<Partial<Book>>({
   title: "",
   description: "",
   author_id: undefined,
-  author_name: "", // Not used for input, but included for consistency
+  author_name: "",
+  quantity: undefined,
+  category_id: undefined,
 });
 const errors = ref<Partial<Record<keyof Omit<Book, "id">, string>>>({
   title: "",
   description: "",
   author_id: "",
+  quantity: "",
+  category_id: "",
 });
 const showModal = ref(false);
 const clickedRow = ref<number | null>(null);
@@ -291,6 +341,260 @@ const editingBook = ref<Book | null>(null);
 const isFormValid = ref(false);
 const currentPage = ref(1);
 const totalPages = ref(1);
+const searchQuery = ref("");
+const debouncedSearchQuery = ref("");
+
+// Simple debounce function
+const debounce = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+) => {
+  let timeoutId: number | undefined;
+  return (...args: Parameters<T>) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay) as any;
+  };
+};
+
+// Fetch categories (GET)
+const fetchCategories = async () => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
+  }
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    const response = await fetch(CATEGORY_API_URL, {
+      method: "GET",
+      headers,
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    categories.value = data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    toast.error("Failed to load categories");
+  }
+};
+
+// Fetch authors (GET)
+const fetchAuthors = async () => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
+  }
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    const response = await fetch(AUTHOR_API_URL, {
+      method: "GET",
+      headers,
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    authors.value = data;
+  } catch (error) {
+    console.error("Error fetching authors:", error);
+    toast.error("Failed to load authors");
+  }
+};
+
+// Fetch a book by ID (GET /api/books/{id})
+const fetchBookById = async (bookId: string) => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return null;
+  }
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    const response = await fetch(`${API_URL}/${bookId}`, {
+      method: "GET",
+      headers,
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const book = await response.json();
+    // Map category name to category_id
+    const category = categories.value.find((c) => c.name === book.category);
+    const category_id = category ? category.id : undefined;
+    // Map author_name to author_id
+    const author = authors.value.find((a) => a.full_name === book.author_name);
+    const author_id = author ? author.id : undefined;
+    return {
+      id: book.id.toString(),
+      title: book.title,
+      description: book.description || "",
+      author_id,
+      author_name: book.author_name || "Unknown",
+      created_by: book.created_by || 0,
+      quantity: book.quantity,
+      category_id,
+      category: book.category,
+    } as Book;
+  } catch (error) {
+    console.error("Error fetching book:", error);
+    toast.error(t("books.fetch_failed"));
+    return null;
+  }
+};
+
+// Fetch books (GET)
+const fetchBooks = async (page = 1) => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
+  }
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    const response = await fetch(`${API_URL}?page=${page}&limit=10`, {
+      method: "GET",
+      headers,
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    books.value = data.books.map((book: any) => ({
+      id: book.id.toString(),
+      title: book.title,
+      description: book.description || "",
+      author_id: book.author_id || 1,
+      author_name: book.author_name || "Unknown",
+      created_by: book.created_by,
+      quantity: book.quantity,
+      category_id: book.category_id,
+      category: book.category, // Include if provided by /api/books
+    }));
+    currentPage.value = data.currentPage;
+    totalPages.value = data.totalPages;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    toast.error(t("books.fetch_failed"));
+  }
+};
+
+// Search books (GET)
+const searchBooks = async (query: string) => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
+  }
+  if (!query.trim()) {
+    fetchBooks(1);
+    return;
+  }
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    const response = await fetch(
+      `${SEARCH_API_URL}?query=${encodeURIComponent(query)}`,
+      {
+        method: "GET",
+        headers,
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    books.value = data.map((book: any) => ({
+      id: book.id.toString(),
+      title: book.title,
+      description: book.description || "",
+      author_id: book.author_id || 1,
+      author_name: book.author_name || "Unknown",
+      created_by: book.created_by || 0,
+      quantity: book.quantity,
+      category_id: book.category_id,
+      category: book.category,
+    }));
+    currentPage.value = 1;
+    totalPages.value = 1;
+  } catch (error) {
+    console.error("Error searching books:", error);
+    toast.error(t("books.search_failed"));
+  }
+};
+
+// Debounced search
+const debouncedSearch = debounce((query: string) => {
+  debouncedSearchQuery.value = query;
+}, 500);
+
+// Watch for search query changes
+watch(searchQuery, (newQuery) => {
+  debouncedSearch(newQuery);
+});
+
+// Watch for debounced search query to trigger search
+watch(debouncedSearchQuery, (newQuery) => {
+  searchBooks(newQuery);
+});
+
+// Clear search
+const clearSearch = () => {
+  searchQuery.value = "";
+  debouncedSearchQuery.value = "";
+  fetchBooks(1);
+};
 
 // Validate form inputs
 const validateForm = () => {
@@ -311,54 +615,16 @@ const validateForm = () => {
       newBook.value.author_id && newBook.value.author_id > 0
         ? ""
         : t("books.errors.author_id_required"),
+    quantity:
+      newBook.value.quantity && newBook.value.quantity > 0
+        ? ""
+        : t("books.errors.quantity_required"),
+    category_id:
+      newBook.value.category_id && newBook.value.category_id > 0
+        ? ""
+        : t("books.errors.category_required"),
   };
   isFormValid.value = Object.values(errors.value).every((error) => !error);
-};
-
-// Fetch books (GET)
-const fetchBooks = async (page = 1) => {
-  if (!isAuthenticated.value || !token.value) {
-    toast.error(t("auth.login_required"));
-    router.push("/login");
-    return;
-  }
-  try {
-    const headers = {
-      Accept: "application/json",
-      Authorization: `Bearer ${token.value}`,
-    };
-    console.log("fetchBooks - Headers:", headers); // Debug
-    const response = await fetch(`${API_URL}?page=${page}&limit=10`, {
-      method: "GET",
-      headers,
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.log("fetchBooks - Error:", errorData); // Debug
-      if (response.status === 401) {
-        toast.error("Session expired, please log in again");
-        router.push("/login");
-      }
-      throw new Error(
-        errorData.message || `HTTP error! Status: ${response.status}`
-      );
-    }
-    const data = await response.json();
-    console.log("fetchBooks - Data:", data); // Debug
-    books.value = data.books.map((book: any) => ({
-      id: book.id.toString(),
-      title: book.title,
-      description: book.description,
-      author_id: book.author_id || 1, // Fallback, adjust if needed
-      author_name: book.author_name || "Unknown", // Map author_name from response
-      created_by: book.created_by,
-    }));
-    currentPage.value = data.currentPage;
-    totalPages.value = data.totalPages;
-  } catch (error) {
-    console.error("Error fetching books:", error);
-    toast.error(t("books.fetch_failed"));
-  }
 };
 
 // Open modal for adding a new book
@@ -369,23 +635,41 @@ const openAddModal = () => {
     description: "",
     author_id: undefined,
     author_name: "",
+    quantity: undefined,
+    category_id: undefined,
   };
-  errors.value = { title: "", description: "", author_id: "" };
+  errors.value = {
+    title: "",
+    description: "",
+    author_id: "",
+    quantity: "",
+    category_id: "",
+  };
   isFormValid.value = false;
   showModal.value = true;
+  fetchCategories();
+  fetchAuthors();
 };
 
 // Open modal for editing a book
-const openEditModal = (index: number) => {
-  editingBook.value = { ...books.value[index] };
-  newBook.value = {
-    title: editingBook.value.title,
-    description: editingBook.value.description,
-    author_id: editingBook.value.author_id,
-    author_name: editingBook.value.author_name,
-  };
-  validateForm();
-  showModal.value = true;
+const openEditModal = async (index: number) => {
+  const bookId = books.value[index].id;
+  const book = await fetchBookById(bookId);
+  if (book) {
+    editingBook.value = { ...book };
+    newBook.value = {
+      title: editingBook.value.title,
+      description: editingBook.value.description,
+      author_id: editingBook.value.author_id,
+      author_name: editingBook.value.author_name,
+      quantity: editingBook.value.quantity,
+      category_id: editingBook.value.category_id,
+    };
+    validateForm();
+    showModal.value = true;
+    fetchCategories();
+    fetchAuthors();
+  }
 };
 
 // Submit book (POST or PUT)
@@ -398,29 +682,18 @@ const submitBook = async () => {
   }
   try {
     const payload = {
-  title: newBook.value.title,
-  description: newBook.value.description,
-  author_id: newBook.value.author_id,
-  quantity: newBook.value.quantity,
-  category_id: newBook.value.category_id,
-  created_by: parseInt(user.value.id),
-};
-
-    // const payload = {
-    //   title: newBook.value.title,
-    //   description: newBook.value.description,
-    //   author_id: newBook.value.author_id,
-    //   created_by: parseInt(user.value.id),
-    // };
-    console.log("submitBook - Payload:", payload);
-
+      title: newBook.value.title,
+      description: newBook.value.description,
+      author_id: newBook.value.author_id,
+      quantity: newBook.value.quantity,
+      category_id: newBook.value.category_id,
+      created_by: parseInt(user.value.id),
+    };
     const headers = {
       Accept: "application/json",
       Authorization: `Bearer ${token.value}`,
       "Content-Type": "application/json",
     };
-    console.log("submitBook - Headers:", headers); // Debug
-    console.log("submitBook - Payload:", payload); // Debug
     const isEditing = !!editingBook.value;
     const url = isEditing ? `${API_URL}/${editingBook.value?.id}` : API_URL;
     const method = isEditing ? "PUT" : "POST";
@@ -431,7 +704,6 @@ const submitBook = async () => {
     });
     if (!response.ok) {
       const errorData = await response.json();
-      console.log("submitBook - Error:", errorData); // Debug
       if (response.status === 401) {
         toast.error("Session expired, please log in again");
         router.push("/login");
@@ -452,6 +724,8 @@ const submitBook = async () => {
       description: "",
       author_id: undefined,
       author_name: "",
+      quantity: undefined,
+      category_id: undefined,
     };
   } catch (error) {
     console.error("Error submitting book:", error);
@@ -474,14 +748,12 @@ const deleteBook = async (bookId: string) => {
       Accept: "application/json",
       Authorization: `Bearer ${token.value}`,
     };
-    console.log("deleteBook - Headers:", headers); // Debug
     const response = await fetch(`${API_URL}/${bookId}`, {
       method: "DELETE",
       headers,
     });
     if (!response.ok) {
       const errorData = await response.json();
-      console.log("deleteBook - Error:", errorData); // Debug
       if (response.status === 401) {
         toast.error("Session expired, please log in again");
         router.push("/login");
@@ -492,7 +764,11 @@ const deleteBook = async (bookId: string) => {
     }
     const result = await response.json();
     toast.success(result.message || t("books.deleted"));
-    await fetchBooks(currentPage.value);
+    if (searchQuery.value) {
+      searchBooks(debouncedSearchQuery.value);
+    } else {
+      await fetchBooks(currentPage.value);
+    }
   } catch (error) {
     console.error("Error deleting book:", error);
     toast.error(t("books.delete_failed"));
@@ -507,7 +783,11 @@ const handleRowClick = (index: number) => {
   }, 300);
 };
 
-onMounted(() => fetchBooks());
+onMounted(() => {
+  fetchBooks();
+  fetchCategories();
+  fetchAuthors();
+});
 </script>
 
 <style scoped>
