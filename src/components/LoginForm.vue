@@ -1,4 +1,3 @@
-<!-- components/LoginForm.vue -->
 <template>
   <div
     class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900"
@@ -24,7 +23,7 @@
             v-model="username"
             type="text"
             required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            class="mt-1 block w-full px-3 py`-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             placeholder="Enter username"
           />
         </div>
@@ -53,12 +52,6 @@
           {{ isLoading ? "Logging in..." : "Login" }}
         </button>
       </form>
-
-      <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-        <p><strong>Demo Credentials:</strong></p>
-        <p>Admin: admin / admin123</p>
-        <p>Librarian: librarian / lib123</p>
-      </div>
     </div>
   </div>
 </template>

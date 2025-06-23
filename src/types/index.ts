@@ -3,6 +3,7 @@ export interface User {
   id: string;
   username: string;
   role: "admin" | "librarian";
+  full_name: string;
 }
 
 export interface Book {
