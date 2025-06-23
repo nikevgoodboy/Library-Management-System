@@ -70,6 +70,13 @@
               <label class="block text-sm font-medium text-gray-700">{{
                 t("students.fields.student_class")
               }}</label>
+              
+              <select name="" id="">
+                <option value="wmad">WMAD</option>
+                <option value="sales">Sales</option>
+                <option value="accounting">Acconting</option>
+
+              </select>
               <input
                 v-model="newStudent.student_class"
                 required
