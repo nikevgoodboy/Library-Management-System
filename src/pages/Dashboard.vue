@@ -10,9 +10,7 @@
 
     <!-- Add Activity Button -->
     <div class="flex justify-between items-center mb-4">
-      <h2
-        class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in"
-      >
+      <h2 class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in">
         Add New Activity
       </h2>
       <button
@@ -28,18 +26,12 @@
       v-if="showModal"
       class="fixed inset-0 bg-transparent backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in"
     >
-      <div
-        class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg animate-form-slide"
-      >
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">
-          Add New Activity
-        </h3>
+      <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg animate-form-slide">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Activity</h3>
         <form @submit.prevent="addActivity">
           <div class="grid grid-cols-1 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Message</label
-              >
+              <label class="block text-sm font-medium text-gray-700">Message</label>
               <input
                 v-model="newActivity.message"
                 required
@@ -47,9 +39,7 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Time</label
-              >
+              <label class="block text-sm font-medium text-gray-700">Time</label>
               <input
                 v-model="newActivity.time"
                 required
@@ -57,9 +47,7 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Icon</label
-              >
+              <label class="block text-sm font-medium text-gray-700">Icon</label>
               <input
                 v-model="newActivity.icon"
                 required
@@ -88,17 +76,14 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div v-if="dashboardData" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <div
         class="relative bg-amber-500 rounded-lg shadow-lg p-4 flex items-center space-x-3 transform hover:scale-105 transition-transform duration-300"
       >
-        <i class="fas fa-dollar-sign text-2xl text-white"></i>
+        <i class="fas fa-book text-2xl text-white"></i>
         <div class="relative text-white">
-          <h3 class="text-md font-semibold">Budget</h3>
-          <p class="text-xl font-bold">$24k</p>
-          <p class="text-xs">
-            <span class="text-green-300">↑ 12%</span> Since last month
-          </p>
+          <h3 class="text-md font-semibold">Total Books</h3>
+          <p class="text-xl font-bold">{{ dashboardData.total_books }}</p>
         </div>
       </div>
 
@@ -107,42 +92,47 @@
       >
         <i class="fas fa-users text-2xl text-white"></i>
         <div class="relative text-white">
-          <h3 class="text-md font-semibold">Total Customers</h3>
-          <p class="text-xl font-bold">1.6k</p>
-          <p class="text-xs">
-            <span class="text-red-300">↓ 16%</span> Since last month
-          </p>
+          <h3 class="text-md font-semibold">Total Students</h3>
+          <p class="text-xl font-bold">{{ dashboardData.total_students }}</p>
         </div>
       </div>
 
       <div
         class="relative bg-lime-500 rounded-lg shadow-lg p-4 flex items-center space-x-3 transform hover:scale-105 transition-transform duration-300"
       >
-        <i class="fas fa-tasks text-2xl text-white"></i>
+        <i class="fas fa-exchange-alt text-2xl text-white"></i>
         <div class="relative text-white">
-          <h3 class="text-md font-semibold">Task Progress</h3>
-          <p class="text-xl font-bold">75.5%</p>
+          <h3 class="text-md font-semibold">Total Borrows</h3>
+          <p class="text-xl font-bold">{{ dashboardData.total_borrows }}</p>
         </div>
       </div>
 
       <div
         class="relative bg-blue-500 rounded-lg shadow-lg p-4 flex items-center space-x-3 transform hover:scale-105 transition-transform duration-300"
       >
-        <i class="fas fa-chart-line text-2xl text-white"></i>
+        <i class="fas fa-undo text-2xl text-white"></i>
         <div class="relative text-white">
-          <h3 class="text-md font-semibold">Total Profit</h3>
-          <p class="text-xl font-bold">$15k</p>
+          <h3 class="text-md font-semibold">Books Returned</h3>
+          <p class="text-xl font-bold">{{ dashboardData.returned }}</p>
         </div>
       </div>
+    </div>
+
+    <!-- Error Message -->
+    <div v-if="error" class="text-red-500 mb-4">
+      {{ error }}
+    </div>
+
+    <!-- Loading State -->
+    <div v-if="!dashboardData && !error" class="text-gray-500 mb-4">
+      Loading dashboard data...
     </div>
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       <div>
         <div class="flex justify-between items-center mb-4">
-          <h2
-            class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in"
-          >
+          <h2 class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in">
             Sales
           </h2>
           <button class="text-blue-600 hover:text-blue-700">
@@ -155,14 +145,10 @@
       </div>
 
       <div>
-        <h2
-          class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in mb-4"
-        >
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in mb-4">
           Traffic Source
         </h2>
-        <div
-          class="bg-white rounded-lg shadow p-6 border border-gray-200 flex items-center"
-        >
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200 flex items-center">
           <canvas ref="trafficCanvas" class="w-full h-64"></canvas>
         </div>
       </div>
@@ -170,14 +156,10 @@
 
     <!-- Recent Activity Feed -->
     <div>
-      <h2
-        class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in mb-4"
-      >
+      <h2 class="text-lg sm:text-xl font-semibold text-gray-800 animate-fade-in mb-4">
         Recent Activity
       </h2>
-      <div
-        class="bg-white rounded-lg shadow p-6 border border-gray-200 max-h-80 overflow-y-auto"
-      >
+      <div class="bg-white rounded-lg shadow p-6 border border-gray-200 max-h-80 overflow-y-auto">
         <div
           v-for="(activity, index) in activities"
           :key="index"
@@ -191,12 +173,8 @@
         >
           <i :class="activity.icon" class="text-xl text-blue-500"></i>
           <div>
-            <p class="text-sm text-gray-800">
-              {{ activity.message }}
-            </p>
-            <p class="text-xs text-gray-500">
-              {{ activity.time }}
-            </p>
+            <p class="text-sm text-gray-800">{{ activity.message }}</p>
+            <p class="text-xs text-gray-500">{{ activity.time }}</p>
           </div>
         </div>
       </div>
@@ -207,9 +185,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useLanguage } from "../composables/useLanguage";
+import { useRouter } from "vue-router";
+import { useAuth } from "../composables/useAuth"; // Import useAuth
 import Chart from "chart.js/auto";
 
 const { t } = useLanguage();
+const router = useRouter();
+const { token, isAuthenticated } = useAuth(); // Access token and auth state
 
 // Chart canvases
 const salesCanvas = ref<HTMLCanvasElement | null>(null);
@@ -235,39 +217,61 @@ const newActivity = ref<{
 // Sample activity feed data
 const activities = ref([
   { icon: "fas fa-book", message: "John borrowed '1984'", time: "2 hours ago" },
-  {
-    icon: "fas fa-undo",
-    message: "Jane returned 'The Great Gatsby'",
-    time: "4 hours ago",
-  },
-  {
-    icon: "fas fa-user-plus",
-    message: "New student Kevin registered",
-    time: "1 day ago",
-  },
-  {
-    icon: "fas fa-book",
-    message: "Sarah borrowed 'To Kill a Mockingbird'",
-    time: "2 days ago",
-  },
+  { icon: "fas fa-undo", message: "Jane returned 'The Great Gatsby'", time: "4 hours ago" },
+  { icon: "fas fa-user-plus", message: "New student Kevin registered", time: "1 day ago" },
+  { icon: "fas fa-book", message: "Sarah borrowed 'To Kill a Mockingbird'", time: "2 days ago" },
 ]);
+
+// API data state
+const dashboardData = ref<{
+  total_books: number;
+  total_students: number;
+  total_borrows: number;
+  borrowed_not_returned: number;
+  returned: number;
+} | null>(null);
+const error = ref<string | null>(null);
+
+// Fetch dashboard data
+const fetchDashboardData = async () => {
+  try {
+    if (!isAuthenticated.value) {
+      error.value = "Please log in to access the dashboard.";
+      router.push("/login");
+      return;
+    }
+
+    const response = await fetch("http://localhost:3000/api/dashboard", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token.value}`, // Use token from useAuth
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 401) {
+      error.value = "Session expired. Please log in again.";
+      localStorage.removeItem("token");
+      localStorage.removeItem("library_user");
+      router.push("/login");
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    dashboardData.value = data;
+  } catch (err) {
+    error.value = `Failed to fetch dashboard data: ${err.message}`;
+    console.error(err);
+  }
+};
 
 // Chart data
 const salesData = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   datasets: [
     {
       label: "Sales",
@@ -284,11 +288,7 @@ const trafficData = {
   datasets: [
     {
       data: [63, 15, 22],
-      backgroundColor: [
-        "rgba(253, 126, 20, 0.6)",
-        "rgba(34, 197, 94, 0.6)",
-        "rgba(147, 51, 234, 0.6)",
-      ],
+      backgroundColor: ["rgba(253, 126, 20, 0.6)", "rgba(34, 197, 94, 0.6)", "rgba(147, 51, 234, 0.6)"],
       borderWidth: 1,
     },
   ],
@@ -345,7 +345,7 @@ const handleActivityClick = (index: number) => {
   clickedActivity.value = index;
   setTimeout(() => {
     clickedActivity.value = null;
-  }, 300); // Reset after 300ms
+  }, 300);
 };
 
 // Clean up charts on unmount
@@ -360,7 +360,11 @@ onUnmounted(() => {
   }
 });
 
-onMounted(() => initCharts());
+// Fetch data and initialize charts on mount
+onMounted(() => {
+  fetchDashboardData();
+  initCharts();
+});
 </script>
 
 <style scoped>
@@ -394,9 +398,8 @@ onMounted(() => initCharts());
   animation: slide-in 0.6s ease-out;
 }
 
-/* Custom backdrop blur for Tailwind */
 .backdrop-blur-sm {
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px); /* For Safari */
+  -webkit-backdrop-filter: blur(4px);
 }
 </style>
