@@ -4,10 +4,10 @@
     <h1
       class="text-2xl sm:text-3xl font-semibold text-gray-800 animate-fade-in"
     >
-      {{ t("nav.dashboard") }}
+      {{ t("nav.students") }}
     </h1>
     <p class="text-gray-500 mb-4 sm:mb-6">
-      {{ t("dashboard.overview") }}
+      {{ t("students.overview") }}
     </p>
 
     <!-- Add Student Button -->
@@ -34,28 +34,28 @@
         class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg animate-form-slide"
       >
         <h3 class="text-lg font-semibold text-gray-800 mb-4">
-          {{ editingStudent ? "Edit Student" : "Add New Student" }}
+          {{ editingStudent ? t("students.edit") : t("students.add") }}
         </h3>
         <form @submit.prevent="submitStudent">
           <div class="grid grid-cols-1 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Name</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                t("students.fields.full_name")
+              }}</label>
               <input
-                v-model="newStudent.name"
+                v-model="newStudent.full_name"
                 required
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
                 @input="validateForm"
               />
-              <p v-if="errors.name" class="text-red-500 text-xs mt-1">
-                {{ errors.name }}
+              <p v-if="errors.full_name" class="text-red-500 text-xs mt-1">
+                {{ errors.full_name }}
               </p>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >ID Card</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                t("students.fields.id_card")
+              }}</label>
               <input
                 v-model="newStudent.id_card"
                 required
@@ -67,36 +67,17 @@
               </p>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Contact Number</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                t("students.fields.student_class")
+              }}</label>
               <input
-                v-model="newStudent.contact_number"
+                v-model="newStudent.student_class"
                 required
-                type="tel"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
                 @input="validateForm"
               />
-              <p v-if="errors.contact_number" class="text-red-500 text-xs mt-1">
-                {{ errors.contact_number }}
-              </p>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Registration Date</label
-              >
-              <input
-                v-model="newStudent.registration_date"
-                required
-                type="date"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
-                @input="validateForm"
-              />
-              <p
-                v-if="errors.registration_date"
-                class="text-red-500 text-xs mt-1"
-              >
-                {{ errors.registration_date }}
+              <p v-if="errors.student_class" class="text-red-500 text-xs mt-1">
+                {{ errors.student_class }}
               </p>
             </div>
           </div>
@@ -106,7 +87,7 @@
               @click="showModal = false"
               class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors duration-300"
             >
-              Cancel
+              {{ t("students.cancel") }}
             </button>
             <button
               type="submit"
@@ -114,7 +95,7 @@
               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-300"
               :class="{ 'opacity-50 cursor-not-allowed': !isFormValid }"
             >
-              {{ editingStudent ? "Update Student" : "Add Student" }}
+              {{ editingStudent ? t("students.update") : t("students.add") }}
             </button>
           </div>
         </form>
@@ -136,13 +117,10 @@
               {{ t("students.id") }}
             </th>
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
-              Contact Number
+              {{ t("students.fields.student_class") }}
             </th>
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
-              Registration Date
-            </th>
-            <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
-              {{ t("students.add") }}
+              {{ t("books.fields.created_by") }}
             </th>
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               {{ t("students.edit") }}
@@ -172,7 +150,7 @@
             <td
               class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200 text-gray-800"
             >
-              {{ student.name }}
+              {{ student.full_name }}
             </td>
             <td
               class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200 text-gray-800"
@@ -182,32 +160,24 @@
             <td
               class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200 text-gray-800"
             >
-              {{ student.contact_number }}
+              {{ student.student_class }}
             </td>
             <td
               class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200 text-gray-800"
             >
-              {{ student.registration_date }}
-            </td>
-            <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
-              <button
-                @click.stop="openAddModal"
-                class="bg-orange-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-orange-500 transition-colors duration-300"
-              >
-                {{ t("students.add") }}
-              </button>
+              {{ student.created_by }}
             </td>
             <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               <button
                 @click.stop="openEditModal(index)"
                 class="bg-blue-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-blue-500 transition-colors duration-300"
               >
-                Edit
+                {{ t("students.edit") }}
               </button>
             </td>
             <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               <button
-                @click.stop="deleteStudent(index)"
+                @click.stop="deleteStudent(student.id)"
                 class="bg-red-400 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-red-500 transition-colors duration-300"
               >
                 {{ t("students.delete") }}
@@ -221,9 +191,15 @@
     <!-- Pagination -->
     <div class="flex justify-end mt-4 sm:mt-6 space-x-2 sm:space-x-3">
       <button
-        v-for="page in 3"
+        v-for="page in totalPages"
         :key="page"
-        class="border px-3 sm:px-4 py-1 sm:py-2 text-blue-600 border-blue-500 rounded-lg hover:bg-blue-50 transition-colors duration-300"
+        :class="[
+          'border px-3 sm:px-4 py-1 sm:py-2 rounded-lg transition-colors duration-300',
+          currentPage === page
+            ? 'bg-blue-500 text-white'
+            : 'text-blue-600 border-blue-500 hover:bg-blue-50',
+        ]"
+        @click="fetchStudents(page)"
       >
         {{ page }}
       </button>
@@ -232,169 +208,243 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useLanguage } from "../composables/useLanguage";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
+import { useAuth } from "../composables/useAuth";
 
 interface Student {
   id: string;
-  name: string;
+  full_name: string;
   id_card: string;
-  contact_number: string;
-  registration_date: string;
+  student_class: string;
+  created_by: number;
 }
 
 const { t } = useLanguage();
 const toast = useToast();
+const router = useRouter();
+const { isAuthenticated, user, token } = useAuth();
 
-const students = ref<Student[]>([
-  {
-    id: "22345-1",
-    name: "Kevin",
-    id_card: "STU001",
-    contact_number: "0963559607",
-    registration_date: "2025-01-15",
-  },
-  {
-    id: "5151-7",
-    name: "Zeru",
-    id_card: "STU002",
-    contact_number: "0886886775",
-    registration_date: "2025-02-10",
-  },
-  {
-    id: "5566-2",
-    name: "Chang",
-    id_card: "STU003",
-    contact_number: "0123456789",
-    registration_date: "2025-03-05",
-  },
-  {
-    id: "7788-9",
-    name: "Than",
-    id_card: "STU004",
-    contact_number: "0987654321",
-    registration_date: "2025-04-20",
-  },
-]);
+const API_URL = "http://localhost:3000/api/students";
 
+const students = ref<Student[]>([]);
 const newStudent = ref<Partial<Student>>({
-  name: "",
+  full_name: "",
   id_card: "",
-  contact_number: "",
-  registration_date: "",
+  student_class: "",
 });
-
-const errors = ref<Partial<Record<keyof Student, string>>>({
-  name: "",
+const errors = ref<
+  Partial<Record<keyof Omit<Student, "id" | "created_by">, string>>
+>({
+  full_name: "",
   id_card: "",
-  contact_number: "",
-  registration_date: "",
+  student_class: "",
 });
-
 const showModal = ref(false);
 const clickedRow = ref<number | null>(null);
 const editingStudent = ref<Student | null>(null);
 const isFormValid = ref(false);
+const currentPage = ref(1);
+const totalPages = ref(1);
 
+// Validate form inputs
 const validateForm = () => {
   errors.value = {
-    name: newStudent.value.name ? "" : "Name is required",
-    id_card: newStudent.value.id_card
-      ? students.value.some(
-          (s) =>
-            s.id_card === newStudent.value.id_card &&
-            s.id !== (editingStudent.value?.id || "")
-        )
-        ? "ID Card must be unique"
-        : ""
-      : "ID Card is required",
-    contact_number: newStudent.value.contact_number
-      ? /^\d{10}$/.test(newStudent.value.contact_number)
-        ? ""
-        : "Contact number must be 10 digits"
-      : "Contact number is required",
-    registration_date: newStudent.value.registration_date
+    full_name: newStudent.value.full_name
       ? ""
-      : "Registration date is required",
+      : t("students.errors.full_name_required"),
+    id_card: newStudent.value.id_card
+      ? ""
+      : t("students.errors.id_card_required"),
+    student_class: newStudent.value.student_class
+      ? ""
+      : t("students.errors.student_class_required"),
   };
-
   isFormValid.value = Object.values(errors.value).every((error) => !error);
 };
 
+// Fetch students (GET)
+const fetchStudents = async (page = 1) => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
+  }
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    console.log("fetchStudents - Headers:", headers); // Debug
+    const response = await fetch(`${API_URL}?page=${page}&limit=10`, {
+      method: "GET",
+      headers,
+    });
+    console.log("TOKEN in fetchStudents:", token.value);
+    console.log("fetchStudents - URL:", `${API_URL}?page=${page}&limit=10`); // Debug
+    console.log("fetchStudents - Response Status:", response.status); // Debug
+    console.log("fetchStudents - Response Headers:", response.headers); // Debug
+    console.log("fetchStudents - Response URL:", response.url); // Debug
+    // console.log()
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log("fetchStudents - Error:", errorData); // Debug
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    console.log("fetchStudents - Data:", data); // Debug
+    students.value = data.students.map((student: any) => ({
+      id: student.id.toString(),
+      full_name: student.full_name,
+      id_card: student.id_card,
+      student_class: student.class, // Note: backend uses 'class', not 'student_class'
+      created_by: student.created_by,
+    }));
+    currentPage.value = data.currentPage;
+    totalPages.value = data.totalPages;
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    toast.error(t("students.fetch_failed"));
+  }
+};
+
+// Open modal for adding a new student
 const openAddModal = () => {
   editingStudent.value = null;
-  newStudent.value = {
-    name: "",
-    id_card: "",
-    contact_number: "",
-    registration_date: "",
-  };
-  errors.value = {
-    name: "",
-    id_card: "",
-    contact_number: "",
-    registration_date: "",
-  };
+  newStudent.value = { full_name: "", id_card: "", student_class: "" };
+  errors.value = { full_name: "", id_card: "", student_class: "" };
   isFormValid.value = false;
   showModal.value = true;
 };
 
+// Open modal for editing a student
 const openEditModal = (index: number) => {
   editingStudent.value = { ...students.value[index] };
-  newStudent.value = { ...editingStudent.value };
+  newStudent.value = {
+    full_name: editingStudent.value.full_name,
+    id_card: editingStudent.value.id_card,
+    student_class: editingStudent.value.student_class,
+  };
   validateForm();
   showModal.value = true;
 };
 
-const submitStudent = () => {
+// Submit student (POST or PUT)
+const submitStudent = async () => {
   if (!isFormValid.value) return;
-
-  if (editingStudent.value) {
-    // Update existing student
-    const index = students.value.findIndex(
-      (s) => s.id === editingStudent.value!.id
-    );
-    if (index !== -1) {
-      students.value[index] = {
-        ...newStudent.value,
-        id: editingStudent.value.id,
-      } as Student;
-      toast.success("Student updated successfully!");
-    }
-  } else {
-    // Add new student
-    const id = `${students.value.length + 1}-${Math.floor(
-      Math.random() * 1000
-    )}`;
-    students.value.push({
-      ...newStudent.value,
-      id,
-    } as Student);
-    toast.success("Student added successfully!");
+  if (!isAuthenticated.value || !token.value || !user.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
   }
-
-  newStudent.value = {
-    name: "",
-    id_card: "",
-    contact_number: "",
-    registration_date: "",
-  };
-  showModal.value = false;
-  editingStudent.value = null;
+  try {
+    const payload = {
+      full_name: newStudent.value.full_name,
+      id_card: newStudent.value.id_card,
+      student_class: newStudent.value.student_class,
+      created_by: parseInt(user.value.id),
+    };
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+      "Content-Type": "application/json",
+    };
+    console.log("submitStudent - Headers:", headers); // Debug
+    console.log("submitStudent - Payload:", payload); // Debug
+    const isEditing = !!editingStudent.value;
+    const url = isEditing ? `${API_URL}/${editingStudent.value?.id}` : API_URL;
+    const method = isEditing ? "PUT" : "POST";
+    const response = await fetch(url, {
+      method,
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log("submitStudent - Error:", errorData); // Debug
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const result = await response.json();
+    toast.success(
+      result.message || t(isEditing ? "students.updated" : "students.created")
+    );
+    await fetchStudents(currentPage.value);
+    showModal.value = false;
+    editingStudent.value = null;
+    newStudent.value = { full_name: "", id_card: "", student_class: "" };
+  } catch (error) {
+    console.error("Error submitting student:", error);
+    toast.error(
+      t(
+        editingStudent.value
+          ? "students.update_failed"
+          : "students.create_failed"
+      )
+    );
+  }
 };
 
-const deleteStudent = (index: number) => {
-  students.value.splice(index, 1);
-  toast.success("Student deleted successfully!");
+// Delete student (DELETE)
+const deleteStudent = async (studentId: string) => {
+  if (!isAuthenticated.value || !token.value) {
+    toast.error(t("auth.login_required"));
+    router.push("/login");
+    return;
+  }
+  if (!confirm(t("students.confirm_delete"))) return;
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+    };
+    console.log("deleteStudent - Headers:", headers); // Debug
+    const response = await fetch(`${API_URL}/${studentId}`, {
+      method: "DELETE",
+      headers,
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log("deleteStudent - Error:", errorData); // Debug
+      if (response.status === 401) {
+        toast.error("Session expired, please log in again");
+        router.push("/login");
+      }
+      throw new Error(
+        errorData.message || `HTTP error! Status: ${response.status}`
+      );
+    }
+    const result = await response.json();
+    toast.success(result.message || t("students.deleted"));
+    await fetchStudents(currentPage.value);
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    toast.error(t("students.delete_failed"));
+  }
 };
 
+// Handle row click for visual feedback
 const handleRowClick = (index: number) => {
   clickedRow.value = index;
   setTimeout(() => {
     clickedRow.value = null;
-  }, 300); // Reset after 300ms for visual feedback
+  }, 300);
 };
+
+onMounted(() => fetchStudents());
 </script>
 
 <style scoped>
@@ -430,26 +480,23 @@ const handleRowClick = (index: number) => {
   animation: slide-in 0.4s ease-out;
 }
 
-/* Ensure table is responsive */
 table {
   width: 100%;
   table-layout: auto;
 }
 
-/* Improve readability on small screens */
 @media (max-width: 640px) {
   table {
-    font-size: 0.75rem; /* Smaller text on mobile */
+    font-size: 0.75rem;
   }
   th,
   td {
-    min-width: 80px; /* Prevent columns from collapsing too much */
+    min-width: 80px;
   }
 }
 
-/* Custom backdrop blur for Tailwind */
 .backdrop-blur-sm {
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px); /* For Safari compatibility */
+  -webkit-backdrop-filter: blur(4px);
 }
 </style>

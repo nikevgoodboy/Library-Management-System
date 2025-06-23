@@ -4,6 +4,7 @@ import axios from "axios";
 
 const user: Ref<User | null> = ref(null);
 const isAuthenticated: ComputedRef<boolean> = computed(() => !!user.value);
+const token = ref(localStorage.getItem("token") || "");
 
 export function useAuth() {
   const login = async (
@@ -67,5 +68,7 @@ export function useAuth() {
     login,
     logout,
     checkAuth,
+    token: computed(() => token.value),
   };
+  
 }
