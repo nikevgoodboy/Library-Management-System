@@ -169,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import { useAuth } from "../composables/useAuth";
@@ -181,6 +181,7 @@ interface Borrow {
   title: string;
   borrow_date: string;
   return_date: string | null;
+  err: string | null;
 }
 
 interface NewLoan {
@@ -242,7 +243,8 @@ const fetchBorrows = async (page = 1) => {
     currentPage.value = data.currentPage;
     totalPages.value = data.totalPages;
   } catch (err) {
-    error.value = `Failed to fetch borrows: ${err.message}`;
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    error.value = `Failed to fetch borrows: ${errorMessage}`;
     console.error(err);
   }
 };
@@ -278,7 +280,7 @@ const handleBorrow = async () => {
     showModal.value = false;
     fetchBorrows(currentPage.value); // Refresh borrows
   } catch (err) {
-    toast.error(`Failed to borrow book: ${err.message}`);
+    toast.error(`Failed to borrow book: ${err instanceof Error ? err.message : String(err)}`);
     console.error(err);
   }
 };
@@ -308,7 +310,7 @@ const returnBook = async (borrowId: string) => {
     toast.success("Book returned successfully!");
     fetchBorrows(currentPage.value); // Refresh borrows
   } catch (err) {
-    toast.error(`Failed to return book: ${err.message}`);
+    toast.error(`Failed to return book: ${err instanceof Error ? err.message : String(err)}`);
     console.error(err);
   }
 };
