@@ -264,7 +264,7 @@ const fetchDashboardData = async () => {
     const data = await response.json();
     dashboardData.value = data;
   } catch (err) {
-    error.value = `Failed to fetch dashboard data: ${err.message}`;
+    error.value = `Failed to fetch dashboard data: ${err instanceof Error ? err.message : String(err)}`;
     console.error(err);
   }
 };

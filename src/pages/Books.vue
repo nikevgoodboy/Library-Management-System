@@ -36,8 +36,43 @@
         <h3 class="text-lg font-semibold text-gray-800 mb-4">
           {{ editingBook ? t("books.edit") : t("books.add") }}
         </h3>
+
+
         <form @submit.prevent="submitBook">
           <div class="grid grid-cols-1 gap-4">
+            <div>
+    <label class="block text-sm font-medium text-gray-700">
+    Quantity
+    </label>
+    <input
+    v-model.number="newBook.quantity"
+    type="number"
+    min="1"
+    required
+    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
+    @input="validateForm"
+  />
+    <p v-if="errors.quantity" class="text-red-500 text-xs mt-1">
+    {{ errors.quantity }}
+    </p>
+  </div>
+   <div>
+  <label class="block text-sm font-medium text-gray-700">
+    Category
+  </label>
+  <input
+    v-model.number="newBook.category_id"
+    type="number"
+    min="1"
+    required
+    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
+    @input="validateForm"
+  />
+    <p v-if="errors.category_id" class="text-red-500 text-xs mt-1">
+    {{ errors.category_id }}
+     </p>
+      </div>
+
             <div>
               <label class="block text-sm font-medium text-gray-700">{{
                 t("books.fields.title")
@@ -102,6 +137,8 @@
             </button>
           </div>
         </form>
+
+
       </div>
     </div>
 
@@ -221,10 +258,13 @@ interface Book {
   id: string;
   title: string;
   description: string;
-  author_id?: number; // Optional since not always provided
-  author_name: string; // Added to match backend response
+  author_id?: number; 
+  author_name: string;
   created_by: number;
+  quantity?: number;
+  category_id?: number;
 }
+
 
 const { t } = useLanguage();
 const toast = useToast();
@@ -358,11 +398,22 @@ const submitBook = async () => {
   }
   try {
     const payload = {
-      title: newBook.value.title,
-      description: newBook.value.description,
-      author_id: newBook.value.author_id,
-      created_by: parseInt(user.value.id),
-    };
+  title: newBook.value.title,
+  description: newBook.value.description,
+  author_id: newBook.value.author_id,
+  quantity: newBook.value.quantity,
+  category_id: newBook.value.category_id,
+  created_by: parseInt(user.value.id),
+};
+
+    // const payload = {
+    //   title: newBook.value.title,
+    //   description: newBook.value.description,
+    //   author_id: newBook.value.author_id,
+    //   created_by: parseInt(user.value.id),
+    // };
+    console.log("submitBook - Payload:", payload);
+
     const headers = {
       Accept: "application/json",
       Authorization: `Bearer ${token.value}`,

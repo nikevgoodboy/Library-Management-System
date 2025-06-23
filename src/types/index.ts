@@ -38,3 +38,10 @@ export interface Translations {
   en: Translation;
   km: Translation;
 }
+
+export interface payload {
+  quantity: number;
+  category: string;
+  id: number;
+
+}
