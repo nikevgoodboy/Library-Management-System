@@ -1,43 +1,48 @@
-// composables/useAuth.ts
 import { ref, computed, type Ref, type ComputedRef } from "vue";
-import type { User, AuthCredential } from "../types";
+import type { User } from "../types";
+import axios from "axios";
 
 const user: Ref<User | null> = ref(null);
 const isAuthenticated: ComputedRef<boolean> = computed(() => !!user.value);
-
-// Demo credentials
-const ADMIN_CREDENTIALS: AuthCredential[] = [
-  { username: "admin", password: "admin123", id: "1", role: "admin" },
-  { username: "librarian", password: "lib123", id: "2", role: "librarian" },
-];
 
 export function useAuth() {
   const login = async (
     username: string,
     password: string
   ): Promise<boolean> => {
-    console.log("Login attempt with username:", username);
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/login", {
+        username,
+        password,
+      });
 
-    const foundUser = ADMIN_CREDENTIALS.find(
-      (cred) => cred.username === username && cred.password === password
-    );
+      // Match the backend response structure
+      const { token, user: userData } = response.data;
 
-    if (foundUser) {
-      const userData: User = {
-        id: foundUser.id,
-        username: foundUser.username,
-        role: foundUser.role,
+      // Ensure userData matches the User type with full_name
+      const formattedUser: User = {
+        id: userData.id,
+        full_name: userData.full_name,
+        username: userData.username,
+        role: userData.role,
       };
-      user.value = userData;
-      localStorage.setItem("library_user", JSON.stringify(userData));
+
+      // Store token and user data
+      localStorage.setItem("library_user", JSON.stringify(formattedUser));
+      localStorage.setItem("token", token);
+      user.value = formattedUser;
+
       return true;
+    } catch (error) {
+      console.error("Login failed:", error);
+      return false;
     }
-    return false;
   };
 
   const logout = (): void => {
     user.value = null;
     localStorage.removeItem("library_user");
+    localStorage.removeItem("token");
   };
 
   const checkAuth = (): void => {
@@ -47,12 +52,11 @@ export function useAuth() {
         user.value = JSON.parse(savedUser) as User;
       } catch (error) {
         console.error("Error parsing saved user:", error);
-        localStorage.removeItem("library_user");
+        logout();
       }
     }
   };
 
-  // Initialize on first use
   if (!user.value) {
     checkAuth();
   }
