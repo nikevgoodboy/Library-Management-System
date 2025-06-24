@@ -71,20 +71,28 @@
                 t("students.fields.student_class")
               }}</label>
 
-              <select name="" id="">
-                <option value="wmad">WMAD</option>
-                <option value="sales">Sales</option>
-                <option value="accounting">Accounting</option>
-              </select>
-              <input
-                v-model="newStudent.student_class"
-                required
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
-                @input="validateForm"
-              />
-              <p v-if="errors.student_class" class="text-red-500 text-xs mt-1">
+                <div class="flex gap-2">
+                <select
+                  v-model="newStudent.student_class"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
+                  @change="validateForm"
+                >
+                  <option value="" disabled>{{ t("Select Class...!") }}</option>
+                  <option value="wmad">WMAD</option>
+                  <option value="sales">Sales</option>
+                  <option value="accounting">Accounting</option>
+                </select>
+                <!-- <input
+                  v-model="newStudent.student_class"
+                  required
+                  class="mt-1 block w-1/2 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
+                  @input="validateForm"
+                  :placeholder="t('students.fields.or_enter_class')"
+                /> -->
+                </div>
+                <p v-if="errors.student_class" class="text-red-500 text-xs mt-1">
                 {{ errors.student_class }}
-              </p>
+                </p>
             </div>
           </div>
           <div class="mt-6 flex justify-end space-x-3">
@@ -125,9 +133,9 @@
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               {{ t("students.fields.student_class") }}
             </th>
-            <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
-              {{ t("books.fields.created_by") }}
-            </th>
+            <!-- <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
+              {{ t("students.fields.created_by") }}
+            </th> -->
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               {{ t("students.edit") }}
             </th>
@@ -168,11 +176,11 @@
             >
               {{ student.student_class }}
             </td>
-            <td
+            <!-- <td
               class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200 text-gray-800"
             >
               {{ student.created_by }}
-            </td>
+            </td> -->
             <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               <button
                 @click.stop="openEditModal(index)"
@@ -312,7 +320,7 @@ const fetchStudents = async (page = 1) => {
       full_name: student.full_name,
       id_card: student.id_card,
       student_class: student.class, // Note: backend uses 'class', not 'student_class'
-      created_by: student.created_by,
+      // created_by: student.created_by,
     }));
     currentPage.value = data.currentPage;
     totalPages.value = data.totalPages;

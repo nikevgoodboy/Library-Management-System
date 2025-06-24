@@ -36,7 +36,7 @@ const translations: Translations = {
     "books.fields.description": "Description",
     "books.fields.author_name": "Author Name",
     "books.fields.author_id": "Author ID",
-    "books.fields.created_by": "Created By",
+    "students.fields.created_by": "Created By",
     "books.edit": "Edit",
     "books.add": "Add",
     "books.delete": "Delete",

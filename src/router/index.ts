@@ -11,7 +11,6 @@ import Dashboard from "../pages/Dashboard.vue";
 import Books from "../pages/Books.vue";
 import Students from "../pages/Students.vue";
 import Borrowing from "../pages/Borrowing.vue";
-import Category from "../pages/Category.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/login",
@@ -46,11 +45,6 @@ const routes: RouteRecordRaw[] = [
         path: "borrowing",
         name: "Borrowing",
         component: Borrowing,
-      },
-      {
-        path: "category",
-        name: "Category",
-        component: Category,
       },
     ],
   },

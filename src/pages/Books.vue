@@ -22,7 +22,7 @@
           <input
             v-model="searchQuery"
             type="text"
-            :placeholder="t('books.search_placeholder')"
+            :placeholder="t('Books Search...')"
             class="px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800 w-48 sm:w-64"
           />
           <button
@@ -187,9 +187,9 @@
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               {{ t("books.fields.author_name") }}
             </th>
-            <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
+            <!-- <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               {{ t("books.fields.created_by") }}
-            </th>
+            </th> -->
             <th class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               {{ t("books.edit") }}
             </th>
@@ -230,11 +230,11 @@
             >
               {{ book.author_name }}
             </td>
-            <td
+            <!-- <td
               class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200 text-gray-800"
             >
               {{ book.created_by }}
-            </td>
+            </td> -->
             <td class="px-2 sm:px-6 py-2 sm:py-3 border border-gray-200">
               <button
                 @click.stop="openEditModal(index)"
@@ -508,7 +508,7 @@ const fetchBooks = async (page = 1) => {
       description: book.description || "",
       author_id: book.author_id || 1,
       author_name: book.author_name || "Unknown",
-      created_by: book.created_by,
+      // created_by: book.created_by,
       quantity: book.quantity,
       category_id: book.category_id,
       category: book.category, // Include if provided by /api/books
@@ -687,7 +687,7 @@ const submitBook = async () => {
       author_id: newBook.value.author_id,
       quantity: newBook.value.quantity,
       category_id: newBook.value.category_id,
-      created_by: parseInt(user.value.id),
+      // created_by: parseInt(user.value.id),
     };
     const headers = {
       Accept: "application/json",

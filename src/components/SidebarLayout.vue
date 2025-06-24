@@ -136,7 +136,7 @@ const navItems: NavItem[] = [
   { path: "/books", label: "nav.books", icon: "fas fa-book" },
   { path: "/students", label: "nav.students", icon: "fas fa-users" },
   { path: "/borrowing", label: "nav.borrowing", icon: "fas fa-exchange-alt" },
-  { path: "/category", label: "nav.category", icon: "fas fa-chart-bar" },
+  // { path: "/category", label: "nav.category", icon: "fas fa-chart-bar" },
 ];
 
 const toggleLanguage = (): void => {
