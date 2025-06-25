@@ -127,7 +127,7 @@
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700">{{
-                t("books.fields.author_id")
+                t("books.fields.author_name")
               }}</label>
               <select
                 v-model.number="newBook.author_id"

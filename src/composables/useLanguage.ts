@@ -42,7 +42,6 @@ const translations: Translations = {
     "books.delete": "Delete",
     "books.cancel": "Cancel",
     "books.list": "Books List",
-
   },
   km: {
     "nav.dashboard": "ផ្ទាំងគ្រប់គ្រង",
@@ -55,7 +54,7 @@ const translations: Translations = {
     "dashboard.overdue": "គ្រប់គ្រងបណ្ណាល័យរបស់អ្នកឱ្យមានប្រសិទ្ធភាព",
     "students.title": "បញ្ជីសិស្ស",
     "books.list": "បញ្ជីសៀវភៅ",
-"students.overview": "ទិដ្ឋភាពទូទៅ",
+    "students.overview": "ទិដ្ឋភាពទូទៅ",
     "students.new": "ថ្មី",
     "students.no": "លេខ",
     "students.name": "ឈ្មោះ",
@@ -80,7 +79,6 @@ const translations: Translations = {
     "books.edit": "កែសម្រួល",
     "books.add": "បន្ថែម",
     "books.delete": "លុប",
-  
   },
 };
 

@@ -71,7 +71,7 @@
                 t("students.fields.student_class")
               }}</label>
 
-                <div class="flex gap-2">
+              <div class="flex gap-2">
                 <select
                   v-model="newStudent.student_class"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-400 bg-white text-gray-800"
@@ -82,10 +82,10 @@
                   <option value="sales">Sales</option>
                   <option value="accounting">Accounting</option>
                 </select>
-                </div>
-                <p v-if="errors.student_class" class="text-red-500 text-xs mt-1">
+              </div>
+              <p v-if="errors.student_class" class="text-red-500 text-xs mt-1">
                 {{ errors.student_class }}
-                </p>
+              </p>
             </div>
           </div>
           <div class="mt-6 flex justify-end space-x-3">
